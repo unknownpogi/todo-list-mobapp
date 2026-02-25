@@ -1,33 +1,38 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { Tabs } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-      }}>
+    <Tabs>
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          header: () => {
+            return (
+              <View className="flex flex-row pt-safe justify-between px-6">
+                <Text className="text-3xl">Tasks</Text>
+                <TouchableOpacity className="flex flex-row">
+                  <MaterialIcons name="grid-view" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            );
+          },
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="home" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="add"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons
+              name="add-circle-outline"
+              size={size}
+              color={color}
+            />
+          ),
         }}
       />
     </Tabs>
