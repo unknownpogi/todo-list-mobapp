@@ -15,8 +15,8 @@ export default function TabLayout() {
         options={{
           header: () => {
             return (
-              <View className="flex flex-row pt-safe justify-between items-center px-6">
-                <Text className="text-3xl">Tasks</Text>
+              <View className="flex flex-row pt-safe justify-between items-center px-6 border border-gray-300">
+                <Text className="text-4xl mt-3 mb-2">Tasks</Text>
                 <TouchableOpacity
                   className="flex flex-row"
                   onPress={() => setIsGrid((prev) => !prev)}
@@ -24,7 +24,7 @@ export default function TabLayout() {
                   {isGrid ? (
                     <MaterialIcons
                       name="format-list-bulleted"
-                      size={24}
+                      size={30}
                       color="black"
                     />
                   ) : (

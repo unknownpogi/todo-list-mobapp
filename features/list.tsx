@@ -28,7 +28,7 @@ export default function LisView() {
         renderItem={({ item }) => (
           <View
             className={`
-        bg-gray-200 flex-1 flex-row justify-between  p-3 border-b border-gray-300  ${isGrid ? "m-1 rounded-xl" : ""}
+         flex-1 flex-row justify-between  p-3 border-b border-gray-300  ${isGrid ? "m-1 rounded-xl bg-gray-200 elevation-sm" : ""}
       `}
             style={
               isGrid

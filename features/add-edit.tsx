@@ -42,7 +42,11 @@ export default function CreateEditTodo() {
 
   return (
     <View
-      className={pathName ? "flex-1 p-3 pb-safe" : "flex-1 pt-safe pb-safe p-3"}
+      className={
+        pathName.endsWith("/edit")
+          ? "flex-1 p-3 pb-safe"
+          : "flex-1 pt-safe pb-safe p-3"
+      }
     >
       <View className="mt-5">
         <Text className="font-bold text-xl mb-1">Title</Text>
