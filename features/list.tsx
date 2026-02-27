@@ -19,7 +19,7 @@ export default function LisView() {
   };
 
   return (
-    <View className="flex-1 pt-3 px-1">
+    <View className="flex-1 px-1">
       <FlatList
         key={isGrid ? "grid" : "list"}
         data={allNotes}
@@ -28,7 +28,7 @@ export default function LisView() {
         renderItem={({ item }) => (
           <View
             className={`
-         flex-1 flex-row justify-between  p-3 border-b border-gray-300  ${isGrid ? "m-1 rounded-xl bg-gray-200 elevation-sm" : ""}
+         flex-1 flex-row justify-between p-3 ${isGrid ? "border m-1 rounded-xl bg-gray-200 elevation-sm" : "border-b"} border-gray-300
       `}
             style={
               isGrid

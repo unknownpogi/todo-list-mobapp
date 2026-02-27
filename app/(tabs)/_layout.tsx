@@ -15,7 +15,7 @@ export default function TabLayout() {
         options={{
           header: () => {
             return (
-              <View className="flex flex-row pt-safe justify-between items-center px-6 border border-gray-300">
+              <View className="flex flex-row pt-safe justify-between items-center px-6 border-b border-gray-300">
                 <Text className="text-4xl mt-3 mb-2">Tasks</Text>
                 <TouchableOpacity
                   className="flex flex-row"

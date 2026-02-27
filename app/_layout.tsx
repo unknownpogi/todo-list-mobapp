@@ -7,12 +7,12 @@ import "../global.css";
 export default function RootLayout() {
   useEffect(() => {
     NavigationBar.setBackgroundColorAsync("#000"); // bottom bar color
-    NavigationBar.setButtonStyleAsync("dark"); // button color
+    NavigationBar.setButtonStyleAsync("light"); // button color
   }, []);
   return (
     <>
       <Stack screenOptions={{ headerShown: false }} />
-      <StatusBar style="dark" backgroundColor="#ffffff" />
+      <StatusBar style="light" backgroundColor="#ffffff" />
     </>
   );
 }
