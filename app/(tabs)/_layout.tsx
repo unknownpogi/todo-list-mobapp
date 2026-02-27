@@ -1,8 +1,13 @@
+import { isContainerGrid } from "@/atoms/atom";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Tabs } from "expo-router";
+import { useAtom } from "jotai";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export default function TabLayout() {
+  // const [isGrid, setIsGrid] = useState(false);
+  const [isGrid, setIsGrid] = useAtom(isContainerGrid);
+
   return (
     <Tabs>
       <Tabs.Screen
@@ -10,10 +15,21 @@ export default function TabLayout() {
         options={{
           header: () => {
             return (
-              <View className="flex flex-row pt-safe justify-between px-6">
+              <View className="flex flex-row pt-safe justify-between items-center px-6">
                 <Text className="text-3xl">Tasks</Text>
-                <TouchableOpacity className="flex flex-row">
-                  <MaterialIcons name="grid-view" size={24} color="black" />
+                <TouchableOpacity
+                  className="flex flex-row"
+                  onPress={() => setIsGrid((prev) => !prev)}
+                >
+                  {isGrid ? (
+                    <MaterialIcons
+                      name="format-list-bulleted"
+                      size={24}
+                      color="black"
+                    />
+                  ) : (
+                    <MaterialIcons name="grid-view" size={24} color="black" />
+                  )}
                 </TouchableOpacity>
               </View>
             );
@@ -26,6 +42,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="add"
         options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons
               name="add-circle-outline"

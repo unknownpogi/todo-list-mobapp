@@ -1,3 +1,5 @@
-export default function ViewDetails() {
+import ViewDetails from "@/features/view";
+
+export default function ViewDetailsRoute() {
   return <ViewDetails />;
 }

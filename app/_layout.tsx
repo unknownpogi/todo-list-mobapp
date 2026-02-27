@@ -1,6 +1,18 @@
+import * as NavigationBar from "expo-navigation-bar";
 import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import "../global.css";
 
 export default function RootLayout() {
-  return <Stack screenOptions={{ headerShown: false }} />;
+  useEffect(() => {
+    NavigationBar.setBackgroundColorAsync("#000"); // bottom bar color
+    NavigationBar.setButtonStyleAsync("dark"); // button color
+  }, []);
+  return (
+    <>
+      <Stack screenOptions={{ headerShown: false }} />
+      <StatusBar style="dark" backgroundColor="#ffffff" />
+    </>
+  );
 }
