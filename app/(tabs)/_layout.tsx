@@ -13,6 +13,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="home"
         options={{
+          title: "Home",
           header: () => {
             return (
               <View className="flex flex-row pt-safe justify-between items-center px-6 border-b border-gray-300">
@@ -42,6 +43,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="add"
         options={{
+          title: "Add Notes",
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons
