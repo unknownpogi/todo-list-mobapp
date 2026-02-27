@@ -27,12 +27,12 @@ export default function ViewDetails() {
       <View className="flex-1">
         <Text className="text-gray-500">{notess?.notes}</Text>
       </View>
-      <View>
+      <View className="p-4">
         <TouchableOpacity
           className="justify-center items-center"
           onPress={() => setModalVisible(true)}
         >
-          <Text className="text-red-500 font-medium text-lg">Delete Task</Text>
+          <Text className="text-red-500 font-medium text-2xl">Delete Task</Text>
         </TouchableOpacity>
       </View>
 

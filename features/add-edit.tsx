@@ -70,10 +70,9 @@ export default function CreateEditTodo() {
           className="bg-gray-200 rounded-lg p-1.5 px-2.5 flex-1 text-lg"
         />
       </View>
-      {/* bg-blue-400 p-4 rounded-xl elevation-lg */}
 
       <View
-        className={`p-4 rounded-xl elevation-lg ${!isEmpty ? "bg-gray-400" : "bg-blue-400"}`}
+        className={`p-4 rounded-xl mb-3 elevation-lg ${!isEmpty ? "bg-gray-400" : "bg-blue-400"}`}
       >
         <TouchableOpacity
           className="justify-center items-center"
