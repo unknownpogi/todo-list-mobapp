@@ -1,22 +1,69 @@
-import { isContainerGrid, listNotesAtom } from "@/atoms/atom";
+import { isContainerGrid } from "@/atoms/atom";
+import { API_URL } from "@/components/config/api";
 import CustomModal from "@/components/custom-modal";
+import { Task } from "@/types";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useFocusEffect } from "@react-navigation/native";
+import axios from "axios";
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
-import { useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { useCallback, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function LisView() {
-  const [allNotes, setAllNotes] = useAtom(listNotesAtom);
+  const [allNotes, setAllNotes] = useState<Task[]>([]);
   const [isGrid, setIsGrid] = useAtom(isContainerGrid);
-  const [selectedId, setSelectedId] = useState(0);
+  const [selectedId, setSelectedId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const handleDelete = () => {
-    setAllNotes(allNotes.filter((prev) => prev.id !== selectedId));
-    setModalVisible(false);
+  useFocusEffect(
+    useCallback(() => {
+      fetchTasks();
+    }, []),
+  );
+
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`${API_URL}/tasks/${selectedId}`);
+      console.log(response);
+    } catch (error) {
+      console.log("Error", error);
+    } finally {
+      fetchTasks();
+      setModalVisible(false);
+    }
   };
+
+  const fetchTasks = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API_URL}/tasks`);
+      setAllNotes(response.data.data);
+    } catch (err) {
+      console.log("Error in getting task", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator
+          size="large"
+          color="#3b82f6" // Tailwind blue-500
+        />
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 px-1">
@@ -24,7 +71,7 @@ export default function LisView() {
         key={isGrid ? "grid" : "list"}
         data={allNotes}
         numColumns={isGrid ? 2 : 1}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.documentId.toString()}
         renderItem={({ item }) => (
           <View
             className={`
@@ -38,7 +85,7 @@ export default function LisView() {
           >
             <TouchableOpacity
               className="flex-1"
-              onPress={() => router.push(`/${item.id}/view-details`)}
+              onPress={() => router.push(`/${item.documentId}/view-details`)}
             >
               <Text className="text-xl" numberOfLines={2}>
                 {item.title}
@@ -47,7 +94,7 @@ export default function LisView() {
 
             <TouchableOpacity
               onPress={() => {
-                setSelectedId(item.id);
+                setSelectedId(item.documentId);
                 setModalVisible(true);
               }}
               z-10

@@ -17,9 +17,9 @@ export default function RootLayout() {
     <Stack
       screenOptions={{
         header: () => (
-          <View className="flex-row justify-between items-center pt-safe border-b border-gray-300 p-4">
+          <View className="flex-row justify-between items-center pt-safe border-b border-gray-300 px-4">
             <TouchableOpacity
-              className="flex-row item-center"
+              className="flex-row item-center py-3"
               onPress={() => route.canGoBack() && route.back()}
             >
               <Ionicons name="chevron-back-outline" size={20} color="blue" />
@@ -29,11 +29,12 @@ export default function RootLayout() {
             <TouchableOpacity
               className=" px-3 py-1 rounded"
               disabled={pathName.endsWith("/edit") ? true : false}
-              onPress={() =>
-                route.push({
-                  pathname: "/[id]/edit", // keep this exact as your file structure
-                  params: { id: stringId }, // pass the dynamic id here
-                })
+              onPress={
+                () => route.push(`/${id}/edit`)
+                // route.push({
+                //   pathname: "/[id]/edit", // keep this exact as your file structure
+                //   params: { id: stringId }, // pass the dynamic id here
+                // })
               }
             >
               <Text className="text-xl text-blue-600">
