@@ -14,6 +14,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Animated, {
+  FadeInDown,
+  FadeOutLeft,
+  LinearTransition,
+} from "react-native-reanimated";
 
 export default function LisView() {
   const [allNotes, setAllNotes] = useState<Task[]>([]);
@@ -47,51 +52,71 @@ export default function LisView() {
   return (
     <View className="flex-1 px-1">
       <FlatList
+        contentContainerStyle={{
+          paddingHorizontal: isGrid ? 4 : 0,
+          paddingTop: 6,
+        }}
         key={isGrid ? "grid" : "list"}
         data={data?.data || []}
         numColumns={isGrid ? 2 : 1}
         keyExtractor={(item) => item.documentId.toString()}
         renderItem={({ item, index }) => (
-          <MotiView
-            from={{ opacity: 0, translateY: 20 }}
-            animate={{ opacity: 1, translateY: 0 }}
-            transition={{
-              opacity: { type: "timing", duration: 300, delay: index * 60 },
-              translateY: { type: "timing", duration: 300, delay: index * 60 },
-            }}
+          <Animated.View
+            layout={LinearTransition.springify()}
+            entering={FadeInDown.delay(index * 60).duration(500)}
+            exiting={FadeOutLeft.duration(250)}
             style={
               isGrid
                 ? { flexBasis: "48%", maxWidth: "48%", minHeight: 90 }
                 : { flex: 1 }
             }
-            className="flex-1 flex-row justify-between"
           >
-            <View
-              className={`
-         flex-1 flex-row justify-between p-3 ${isGrid ? "border m-1 rounded-xl bg-gray-200 elevation-sm" : "border-b"} border-gray-300
-      `}
+            <MotiView
+              from={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{
+                scale: {
+                  type: "timing",
+                  duration: 500,
+                  delay: index * 60,
+                },
+              }}
+              className="flex-1 flex-row justify-between"
             >
-              <TouchableOpacity
-                className="flex-1"
-                onPress={() => router.push(`/${item.documentId}/view-details`)}
+              <View
+                className={`flex-1 flex-row justify-between p-3 ${
+                  isGrid
+                    ? "border m-1 rounded-xl bg-gray-200 elevation-sm"
+                    : "border-b"
+                } border-gray-300`}
               >
-                <Text className="text-xl" numberOfLines={2}>
-                  {item.title}
-                </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  className="flex-1"
+                  onPress={() =>
+                    router.push(`/${item.documentId}/view-details`)
+                  }
+                >
+                  <Text className="text-xl" numberOfLines={2}>
+                    {item.title}
+                  </Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => {
-                  setSelectedId(item.documentId);
-                  setModalVisible(true);
-                }}
-                z-10
-                className={isGrid ? "absolute top-2 right-2 z-10" : ""}
-              >
-                <MaterialIcons name="delete-outline" size={24} color="black" />
-              </TouchableOpacity>
-            </View>
-          </MotiView>
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectedId(item.documentId);
+                    setModalVisible(true);
+                  }}
+                  className={isGrid ? "absolute top-2 right-2 z-10" : ""}
+                >
+                  <MaterialIcons
+                    name="delete-outline"
+                    size={24}
+                    color="black"
+                  />
+                </TouchableOpacity>
+              </View>
+            </MotiView>
+          </Animated.View>
         )}
       />
 
