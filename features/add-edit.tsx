@@ -1,34 +1,61 @@
-import { API_URL } from "@/components/config/api";
+import { useAddTask, useTask, useUpdateTask } from "@/hooks/tasks";
 import { FormFields } from "@/types";
-import axios from "axios";
 import { useLocalSearchParams, usePathname, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import {
+  ActivityIndicator,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function CreateEditTodo() {
   const { id } = useLocalSearchParams();
-  const [title, setTitle] = useState("");
-  const [notes, setNotes] = useState("");
+  const taskId = Array.isArray(id) ? id[0] : id;
   const pathName = usePathname();
   const route = useRouter();
+  const {
+    data,
+    isLoading: isTaskLoading,
+    isFetching,
+    isError: isTaskError,
+    isSuccess,
+  } = useTask(taskId);
+  const { data: updatedTask, isError, mutate: updateTask } = useUpdateTask();
+  const [title, setTitle] = useState(data?.data.title || "");
+  const [notes, setNotes] = useState(data?.data.notes || "");
+  const {
+    mutate: addTask,
+    status,
+    isError: isAddError,
+    isSuccess: isAddSuccess,
+  } = useAddTask();
   const [formErrors, setFormErrors] = useState({
     title: "",
     note: "",
   });
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
-  const fetchTasks = async () => {
-    try {
-      const response = await axios.get(`${API_URL}/tasks/${id}`);
-      setTitle(response.data.data.title);
-      setNotes(response.data.data.notes);
-    } catch (err) {
-      console.log("Error in getting task", err);
+  if (id) {
+    if (isTaskLoading) {
+      return (
+        <View className="flex-1 justify-center items-center bg-white">
+          <ActivityIndicator
+            size="large"
+            color="#3b82f6" // Tailwind blue-500
+          />
+        </View>
+      );
     }
-  };
+
+    if (isTaskError || !data) {
+      return (
+        <div className="flex justify-center items-center h-64">
+          <p>Error loading task</p>
+        </div>
+      );
+    }
+  }
 
   const validateForm = () => {
     const errors = {
@@ -52,11 +79,9 @@ export default function CreateEditTodo() {
   };
 
   const handleInputChange = (field: FormFields, value: string) => {
-    // Update the value
     if (field === "title") setTitle(value);
     if (field === "note") setNotes(value);
 
-    // Clear the error for this field if it exists
     if (formErrors[field]) {
       setFormErrors((prev) => ({ ...prev, [field]: "" }));
     }
@@ -66,32 +91,49 @@ export default function CreateEditTodo() {
     if (!validateForm()) {
       return;
     }
-
-    try {
-      if (id) {
-        const response = await axios.put(`${API_URL}/tasks/${id}`, {
-          data: {
-            title,
-            notes,
+    if (id) {
+      updateTask(
+        {
+          id: taskId,
+          title,
+          notes,
+        },
+        {
+          onSuccess: () => {
+            console.log("Task Updated");
+            setTitle("");
+            setNotes("");
+            route.back();
           },
-        });
-        console.log(response.data);
-      } else {
-        const response = await axios.post(`${API_URL}/tasks`, {
-          data: {
-            title,
-            notes,
+          onError: (err) => console.error("Update failed", err),
+        },
+      );
+    } else {
+      addTask(
+        {
+          title,
+          notes,
+        },
+        {
+          onSuccess: () => {
+            console.log("Task Upload");
+            setTitle("");
+            setNotes("");
+            route.back();
           },
-        });
-        console.log(response.data);
-      }
-    } catch (error) {
-      console.log("Error in saving", error);
-    } finally {
-      setTitle("");
-      setNotes("");
-      route.back();
+          onError: (err) => console.error("Update failed", err),
+        },
+      );
     }
+
+    // try {
+    // } catch (error) {
+    //   console.log("Error in saving", error);
+    // } finally {
+    //   setTitle("");
+    //   setNotes("");
+    //   route.back();
+    // }
     // setAllNotes((prevNotes) => {
     //   if (id) {
     //     return prevNotes.map((note) =>
@@ -135,7 +177,6 @@ export default function CreateEditTodo() {
 
       <View className="flex-1 mb-1 mt-5">
         <Text className="font-bold text-xl mb-1">Notes</Text>
-        <Text>You need to put a text in here</Text>
         <TextInput
           placeholder="Enter task"
           value={notes}

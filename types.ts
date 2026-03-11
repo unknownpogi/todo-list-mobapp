@@ -15,3 +15,8 @@ export type Task = {
 };
 
 export type FormFields = "title" | "note";
+
+export type TaskPayload = {
+  title: string;
+  notes: string;
+};

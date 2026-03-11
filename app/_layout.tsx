@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "../global.css";
+import Providers from "./provider";
 
 export default function RootLayout() {
   useEffect(() => {
@@ -10,9 +11,9 @@ export default function RootLayout() {
     NavigationBar.setButtonStyleAsync("dark"); // button color
   }, []);
   return (
-    <>
+    <Providers>
       <Stack screenOptions={{ headerShown: false }} />
       <StatusBar style="dark" backgroundColor="#ffffff" />
-    </>
+    </Providers>
   );
 }
