@@ -8,7 +8,6 @@ import {
 import { Task } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-// Custom hook, NOT a normal function
 export const useAllTasks = () => {
   return useQuery<{ data: Task[] }>({
     queryKey: ["tasks"],

@@ -32,9 +32,9 @@ export default function ViewDetails() {
 
   if (isError || !data) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <p>Error loading task</p>
-      </div>
+      <View className="flex justify-center items-center h-64">
+        <Text>Error loading task</Text>
+      </View>
     );
   }
 

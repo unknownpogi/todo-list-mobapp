@@ -38,7 +38,9 @@ export default function LisView() {
     );
   }
 
-  if (isError) return <p>Error loading tasks</p>;
+  if (isError) return <Text>Error loading tasks</Text>;
+
+  console.log(data?.data);
 
   const handleDelete = async () => {
     if (!selectedId) return;
